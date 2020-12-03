@@ -5,7 +5,9 @@ logging:
 ---
 
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
 
 logging:
   level:
@@ -14,7 +16,9 @@ logging:
 ---
 
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
 
 logging:
   path: '/tmp/'
