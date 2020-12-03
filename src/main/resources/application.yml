@@ -1,6 +1,23 @@
 logging:
   level:
     root: INFO
-    org:
-      springframework:
-        security: DEBUG
+
+---
+
+spring:
+  profiles: dev
+
+logging:
+  level:
+    root: DEBUG
+
+---
+
+spring:
+  profiles: prod
+
+logging:
+  path: '/tmp/'
+  file: readinglist.log
+  level:
+    root: WARN
