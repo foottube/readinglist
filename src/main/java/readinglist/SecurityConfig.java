@@ -2,6 +2,7 @@ package readinglist;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Example;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,7 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return readerRepository.getOne(username);
+                Reader example = new Reader();
+                example.setUsername(username);
+                return readerRepository.findOne(Example.of(example)).orElseThrow(() -> new UsernameNotFoundException("Cannot find user with username " + username));
             }
         });
     }

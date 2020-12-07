@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @SpringBootTest
-public class ReadingListRepositoryTest {
+public class ReadingListRepositoryTests {
 
     @Autowired
     private ReadingListRepository readingListRepository;
