@@ -1,8 +1,8 @@
-package readinglist;
+package readinglist.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Example;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import readinglist.security.Reader;
+import readinglist.security.ReaderRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -17,6 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private ReaderRepository readerRepository;
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new StandardPasswordEncoder("53cr3t");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -34,10 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                Reader example = new Reader();
-                example.setUsername(username);
-                return readerRepository.findOne(Example.of(example)).orElseThrow(() -> new UsernameNotFoundException("Cannot find user with username " + username));
+                Reader reader = readerRepository.findByUsername(username);
+                if (reader != null) {
+                    return reader;
+                }
+                throw new UsernameNotFoundException("User '" + username + "' not found");
             }
-        });
+        }).passwordEncoder(encoder());
     }
 }
