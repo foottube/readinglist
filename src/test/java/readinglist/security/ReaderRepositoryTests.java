@@ -3,8 +3,6 @@ package readinglist.security;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import readinglist.security.Reader;
-import readinglist.security.ReaderRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
